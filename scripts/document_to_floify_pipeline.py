@@ -14,12 +14,22 @@ import requests
 import urllib.parse
 from datetime import datetime
 from mistralai import Mistral
+from dotenv import load_dotenv
 
-# Configuration
-LANDINGAI_API_KEY = "OWx6bWd0c3JpNGI2YTk2bDN3OHF3OlJ5NVJqUGFWb3VwbDM4ZjlEVmJvVEp6cjA1TTdmdnc3"
-MISTRAL_API_KEY = "68T0CBWpmreNywJa25eHmxb37xRhKlVO"
-LANDINGAI_URL = "https://api.va.landing.ai/v1/tools/agentic-document-analysis"
-MISTRAL_MODEL = "mistral-large-latest"  # LLM model
+# Load environment variables
+load_dotenv()
+
+# Configuration from environment variables
+LANDINGAI_API_KEY = os.getenv("LANDINGAI_API_KEY")
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+LANDINGAI_URL = os.getenv("LANDINGAI_URL", "https://api.va.landing.ai/v1/tools/agentic-document-analysis")
+MISTRAL_MODEL = os.getenv("MISTRAL_MODEL", "mistral-large-latest")  # LLM model
+
+# Validate required environment variables
+if not LANDINGAI_API_KEY:
+    raise ValueError("LANDINGAI_API_KEY environment variable is not set")
+if not MISTRAL_API_KEY:
+    raise ValueError("MISTRAL_API_KEY environment variable is not set")
 
 # Initialize Mistral client
 mistral_client = Mistral(api_key=MISTRAL_API_KEY)

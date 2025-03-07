@@ -2,6 +2,10 @@ from flask import Flask, request, jsonify
 import os
 import json
 import sys
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Add scripts directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'scripts'))
@@ -53,8 +57,12 @@ def root():
     return "Document to Floify API is running. Use /process-document endpoint for document processing."
 
 if __name__ == '__main__':
-    PORT = 7777  # Fixed port for easier testing
-    print(f"Starting server on port {PORT}")
-    print(f"To test the API, use: curl -X POST http://localhost:{PORT}/process-document -H \"Content-Type: application/json\" -d '{{\"document_url\": \"https://example.com/sample.pdf\"}}'")
+    # Get configuration from environment variables
+    PORT = int(os.getenv('PORT', 7777))
+    HOST = os.getenv('HOST', '0.0.0.0')
+    DEBUG = os.getenv('DEBUG', 'true').lower() == 'true'
     
-    app.run(host='0.0.0.0', port=PORT, debug=True) 
+    print(f"Starting server on {HOST}:{PORT}")
+    print(f"To test the API, use: curl -X POST http://{HOST if HOST != '0.0.0.0' else 'localhost'}:{PORT}/process-document -H \"Content-Type: application/json\" -d '{{\"document_url\": \"https://example.com/sample.pdf\"}}'")
+    
+    app.run(host=HOST, port=PORT, debug=DEBUG) 

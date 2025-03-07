@@ -1,7 +1,17 @@
 #!/bin/bash
 
 # Script to set up and run ngrok for the document-to-floify API
-echo "Setting up ngrok for the document-to-floify API (port 7777)..."
+echo "Setting up ngrok for the document-to-floify API..."
+
+# Load environment variables if available
+if [ -f ".env" ]; then
+    source ".env"
+fi
+
+# Set default port if not in environment
+PORT=${PORT:-7777}
+
+echo "Will expose port: ${PORT}"
 
 # Check if ngrok is already installed
 if ! command -v ngrok &> /dev/null; then
@@ -43,15 +53,15 @@ echo ""
 echo "Replace YOUR_AUTH_TOKEN with the token from your ngrok account."
 echo ""
 
-# Run ngrok on the correct port (7777)
-echo "Starting ngrok to expose port 7777..."
+# Run ngrok on the correct port
+echo "Starting ngrok to expose port ${PORT}..."
 echo "This will create a public URL for your document-to-floify API."
 echo ""
-echo "Running: ${NGROK_PATH} http 7777"
+echo "Running: ${NGROK_PATH} http ${PORT}"
 echo ""
 echo "When ngrok starts, it will display the public URL your team can use."
 echo "Example API usage: https://your-ngrok-url.ngrok.io/process-document"
 echo ""
 
 # Start ngrok
-${NGROK_PATH} http 7777 
+${NGROK_PATH} http ${PORT} 
